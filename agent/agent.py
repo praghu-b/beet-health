@@ -133,6 +133,12 @@ async def entrypoint(ctx: JobContext):
     logger.info(f"Connecting agent worker to LiveKit room: {ctx.room.name}")
     await ctx.connect(auto_subscribe=AutoSubscribe.SUBSCRIBE_ALL)
 
+    # Prevent duplicate agents from joining the same room
+    for p in ctx.room.remote_participants.values():
+        if p.identity.startswith("agent") or "agent" in p.identity.lower():
+            logger.warning(f"Another agent ({p.identity}) is already active in {ctx.room.name}. Exiting duplicate.")
+            return
+
     logger.info("Initializing LiveKit Inference session (Deepgram STT, Gemma LLM, Cartesia TTS)...")
     session = AgentSession(
         stt=inference.STT("deepgram/nova-3"),
@@ -151,4 +157,4 @@ async def entrypoint(ctx: JobContext):
     await session.say("Hi! I'm Beet, your nutrition assistant. What did you have to eat?")
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(WorkerOptions(agent_name="beet-nutrition-agent", entrypoint_fnc=entrypoint))

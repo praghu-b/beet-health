@@ -33,13 +33,18 @@ const getLivekitToken = async (req, res) => {
 
     const token = await at.toJwt();
 
-    // Automatically trigger agent dispatch for the room
+    // Automatically trigger agent dispatch for the room if not already active
     try {
       const dispatchClient = new AgentDispatchClient(livekitUrl, apiKey, apiSecret);
-      await dispatchClient.createDispatch(room, '');
-      console.log(`Dispatched agent to room '${room}'`);
+      const existing = await dispatchClient.listDispatch(room).catch(() => []);
+      const hasActive = Array.isArray(existing) && existing.length > 0;
+      if (!hasActive) {
+        await dispatchClient.createDispatch(room, 'beet-nutrition-agent');
+        console.log(`Dispatched beet-nutrition-agent to room '${room}'`);
+      } else {
+        console.log(`Agent dispatch already exists for room '${room}', skipping duplicate.`);
+      }
     } catch (dispatchErr) {
-      // Dispatch may already exist for active room
       console.log(`Agent dispatch note: ${dispatchErr.message}`);
     }
 
