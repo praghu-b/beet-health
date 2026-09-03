@@ -1,4 +1,4 @@
-const { AccessToken, AgentDispatchClient } = require('livekit-server-sdk');
+const { AccessToken, AgentDispatchClient, RoomServiceClient } = require('livekit-server-sdk');
 
 const getLivekitToken = async (req, res) => {
   try {
@@ -33,16 +33,34 @@ const getLivekitToken = async (req, res) => {
 
     const token = await at.toJwt();
 
-    // Automatically trigger agent dispatch for the room if not already active
+    // Ensure a live agent is dispatched without delay or duplicate
     try {
+      const roomService = new RoomServiceClient(livekitUrl, apiKey, apiSecret);
       const dispatchClient = new AgentDispatchClient(livekitUrl, apiKey, apiSecret);
-      const existing = await dispatchClient.listDispatch(room).catch(() => []);
-      const hasActive = Array.isArray(existing) && existing.length > 0;
-      if (!hasActive) {
+
+      let hasActiveAgent = false;
+      try {
+        const participants = await roomService.listParticipants(room);
+        hasActiveAgent = participants.some(
+          (p) => p.identity.startsWith('agent') || p.kind === 2 || p.isAgent
+        );
+      } catch (roomErr) {
+        hasActiveAgent = false;
+      }
+
+      if (!hasActiveAgent) {
+        // Clear any previous stale dispatches
+        try {
+          const oldDispatches = await dispatchClient.listDispatch(room);
+          for (const d of oldDispatches || []) {
+            await dispatchClient.deleteDispatch(d.id, room).catch(() => {});
+          }
+        } catch (_) {}
+
         await dispatchClient.createDispatch(room, 'beet-nutrition-agent');
-        console.log(`Dispatched beet-nutrition-agent to room '${room}'`);
+        console.log(`Dispatched fresh beet-nutrition-agent to room '${room}'`);
       } else {
-        console.log(`Agent dispatch already exists for room '${room}', skipping duplicate.`);
+        console.log(`Agent already active in room '${room}', skipping duplicate dispatch.`);
       }
     } catch (dispatchErr) {
       console.log(`Agent dispatch note: ${dispatchErr.message}`);

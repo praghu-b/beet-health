@@ -37,7 +37,29 @@ export default function VoiceRoom({ onMealUpdate }) {
       room.on(RoomEvent.Connected, () => {
         setIsConnected(true);
         setIsConnecting(false);
-        setStatusMessage("Listening... Say: 'I had two rotis and a katori of dal for lunch'");
+        const hasAgent = Array.from(room.remoteParticipants.values()).some((p) =>
+          p.identity.includes('agent')
+        );
+        if (hasAgent) {
+          setStatusMessage("Beet Assistant is ready! Say: 'I had two rotis and a katori of dal for lunch'");
+        } else {
+          setStatusMessage('Connected to room. Waiting for Beet Assistant to join...');
+        }
+      });
+
+      room.on(RoomEvent.ParticipantConnected, (participant) => {
+        if (participant.identity.includes('agent')) {
+          setStatusMessage("Beet Assistant joined! Listening... Say what you ate.");
+        }
+      });
+
+      room.on(RoomEvent.ActiveSpeakersChanged, (speakers) => {
+        const isAgentSpeaking = speakers.some((s) => s.identity.includes('agent'));
+        if (isAgentSpeaking) {
+          setStatusMessage('Beet Assistant is speaking...');
+        } else {
+          setStatusMessage("Listening... Speak your meal or correction.");
+        }
       });
 
       room.on(RoomEvent.Disconnected, () => {
@@ -69,7 +91,9 @@ export default function VoiceRoom({ onMealUpdate }) {
       room.on(RoomEvent.TrackSubscribed, (track, publication, participant) => {
         if (track.kind === 'audio') {
           const element = track.attach();
+          element.autoplay = true;
           document.body.appendChild(element);
+          setStatusMessage("Beet Assistant connected and ready!");
         }
       });
 
