@@ -28,19 +28,6 @@ import tools
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("beet-voice-agent")
 
-def get_boosted_food_keywords() -> list:
-    keywords = set()
-    for food in food_matcher.get_all_foods():
-        keywords.add(f"{food['name'].lower()}:2")
-        keywords.add(f"{food['id'].lower()}:2")
-        for alias in food.get("aliases", []):
-            keywords.add(f"{alias.lower()}:2")
-        for u in food.get("units", []):
-            keywords.add(f"{u['name'].lower()}:2")
-    for extra in ["katori:2", "bowl:2", "plate:2", "glass:2", "piece:2", "breakfast:2", "lunch:2", "dinner:2", "snack:2"]:
-        keywords.add(extra)
-    return list(keywords)
-
 SYSTEM_INSTRUCTION = """
 You are Beet's personal voice nutrition assistant.
 Your goal is to help users track their meals effortlessly through spoken conversation.
@@ -161,11 +148,10 @@ async def entrypoint(ctx: JobContext):
             logger.warning(f"Another agent ({p.identity}) is already active in {ctx.room.name}. Exiting duplicate.")
             return
 
-    logger.info("Initializing LiveKit Inference session with food keywords boost...")
-    boosted_keywords = get_boosted_food_keywords()
+    logger.info("Initializing LiveKit Inference session (Deepgram STT, Gemma LLM, Cartesia TTS)...")
 
     session = AgentSession(
-        stt=inference.STT("deepgram/nova-3", language="en", extra_kwargs={"keywords": boosted_keywords}),
+        stt=inference.STT("deepgram/nova-3"),
         llm=inference.LLM("google/gemma-4-31b-it"),
         tts=inference.TTS("cartesia/sonic-3"),
         vad=silero.VAD.load(),
