@@ -1,0 +1,17 @@
+{
+  "name": "beet-voice-meal-logger",
+  "version": "1.0.0",
+  "description": "Beet Voice-Based Meal Logger built with LiveKit Agents, Node.js, MongoDB Atlas, and React",
+  "scripts": {
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "start:server": "npm --prefix server start",
+    "build:client": "npm --prefix client run build",
+    "test:server": "npm --prefix server test",
+    "test:agent": "python -m unittest discover -s agent/tests -p \"test_*.py\"",
+    "test": "npm run test:server && npm run test:agent"
+  },
+  "keywords": ["beet", "nutrition", "livekit", "voice-assistant", "mern"],
+  "author": "",
+  "license": "ISC"
+}
