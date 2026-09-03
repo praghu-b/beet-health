@@ -42,3 +42,8 @@ data/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Personal interview notes & prep
+ENGINEERING_CHALLENGES.md
+notes.md
+
