@@ -190,21 +190,7 @@ Being completely honest and transparent about trade-offs and future enhancements
 
 ---
 
-## 7. Engineering Challenges & Interview Debrief
-
-A detailed breakdown of real-world distributed systems, WebRTC, and AI agent bugs encountered during implementation—along with root causes, debugging workflows, and interview talking points—is documented in:
-
-👉 **[ENGINEERING_CHALLENGES.md](file:///c:/Users/Balamurugan/Desktop/Assignments/beet-health/ENGINEERING_CHALLENGES.md)**
-
-Key covered topics:
-1. **LiveKit Agents 1.x Architecture Migration**: Migrating from deprecated `VoicePipelineAgent` to modern `AgentSession` + `Agent`.
-2. **Dual Agent Voice Overlap & Echo**: Resolving WebRTC double-dispatch concurrency race conditions.
-3. **Instant Reconnect Latency**: Moving from passive control-plane dispatch caches to active `RoomServiceClient` participant probing.
-4. **Nutrition Boundary Enforcement**: Eliminating LLM calorie hallucinations with deterministic service-layer mathematics.
-
----
-
-## 8. Submission Checklist
+## 7. Submission Checklist
 - [x] Three core voice actions: Log, Edit, Delete.
 - [x] Strict food database boundary (`foods.json` sole source of truth).
 - [x] Data persistence across restarts (MongoDB Atlas).
@@ -213,4 +199,4 @@ Key covered topics:
 - [x] Clean React web frontend with real-time UI sync.
 - [x] Rigorous automated tests (100% passing).
 - [x] Comprehensive README with setup, architecture, and trade-offs.
-- [x] Real-world debugging documentation (`ENGINEERING_CHALLENGES.md`).
+
