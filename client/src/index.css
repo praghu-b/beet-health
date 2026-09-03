@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  
+  /* Brand palette */
+  --beet-primary: #e11d48;
+  --beet-primary-hover: #be123c;
+  --beet-light: #ffe4e6;
+  --beet-gradient: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+  
+  /* Accent greens for nutrition */
+  --emerald-primary: #10b981;
+  --emerald-light: #d1fae5;
+  --emerald-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+
+  /* Neutral surfaces */
+  --bg-main: #f8fafc;
+  --surface-card: #ffffff;
+  --surface-subtle: #f1f5f9;
+  --border-subtle: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  /* Typography */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+
+  /* Macro Badges */
+  --macro-cal: #f97316;
+  --macro-cal-bg: #ffedd5;
+  --macro-protein: #10b981;
+  --macro-protein-bg: #d1fae5;
+  --macro-carbs: #3b82f6;
+  --macro-carbs-bg: #dbeafe;
+  --macro-fat: #a855f7;
+  --macro-fat-bg: #f3e8ff;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Animations */
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 0.3; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+@keyframes wave {
+  0%, 100% { height: 8px; }
+  50% { height: 28px; }
+}
+
+.pulsing-dot {
+  width: 12px;
+  height: 12px;
+  background-color: var(--emerald-primary);
+  border-radius: 50%;
+  animation: pulse-ring 1.5s infinite ease-in-out;
+}
+
+.voice-wave-bar {
+  width: 4px;
+  background: var(--beet-primary);
+  border-radius: 4px;
+  animation: wave 1s infinite ease-in-out;
+}
+
+/* Base Utility Classes */
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active {
+  transform: scale(0.98);
+}
