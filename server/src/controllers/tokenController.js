@@ -33,6 +33,16 @@ const getLivekitToken = async (req, res) => {
 
     const token = await at.toJwt();
 
+    // Automatically trigger agent dispatch for the room
+    try {
+      const dispatchClient = new AgentDispatchClient(livekitUrl, apiKey, apiSecret);
+      await dispatchClient.createDispatch(room, '');
+      console.log(`Dispatched agent to room '${room}'`);
+    } catch (dispatchErr) {
+      // Dispatch may already exist for active room
+      console.log(`Agent dispatch note: ${dispatchErr.message}`);
+    }
+
     return res.status(200).json({
       success: true,
       token,

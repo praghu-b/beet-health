@@ -76,6 +76,13 @@ export default function VoiceRoom({ onMealUpdate }) {
       // 4. Connect to LiveKit
       await room.connect(tokenData.url, tokenData.token);
 
+      // Explicitly unlock browser audio playback for agent speech
+      try {
+        await room.startAudio();
+      } catch (audioErr) {
+        console.warn('Audio autoplay requires user gesture or already started:', audioErr);
+      }
+
       // 5. Publish microphone
       try {
         const audioTrack = await createLocalAudioTrack({

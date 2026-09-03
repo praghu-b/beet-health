@@ -162,8 +162,9 @@ def create_agent_pipeline():
     }
 
 async def entrypoint(ctx):
+    from livekit.agents import AutoSubscribe
     logger.info(f"Connecting agent to LiveKit room: {ctx.room.name}")
-    await ctx.connect(auto_subscribe=True)
+    await ctx.connect(auto_subscribe=AutoSubscribe.SUBSCRIBE_ALL)
 
     pipeline_cfg = create_agent_pipeline()
     fnc_ctx = pipeline_cfg["FunctionContextClass"](room=ctx.room)
@@ -182,7 +183,7 @@ async def entrypoint(ctx):
     logger.info(f"Participant joined: {participant.identity}. Starting voice pipeline.")
     agent.start(ctx.room, participant)
 
-    # Initial greeting
+    # Initial greeting - Agent talks back immediately!
     await agent.say("Hi! I'm Beet, your nutrition assistant. What did you have to eat?", allow_interruptions=True)
 
 if __name__ == "__main__":
