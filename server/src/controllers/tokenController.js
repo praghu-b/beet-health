@@ -1,4 +1,4 @@
-const { AccessToken } = require('livekit-server-sdk');
+const { AccessToken, AgentDispatchClient } = require('livekit-server-sdk');
 
 const getLivekitToken = async (req, res) => {
   try {
