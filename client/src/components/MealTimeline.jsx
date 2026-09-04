@@ -9,7 +9,7 @@ const MEAL_SLOTS = [
   { id: 'snack', label: 'Snacks', icon: Cookie, color: '#10b981' },
 ];
 
-export default function MealTimeline({ meals, onRefresh, selectedDate }) {
+export default function MealTimeline({ meals, onRefresh }) {
   const [editingItem, setEditingItem] = useState(null); // { logId, itemId, quantity, foodName }
   const [loadingAction, setLoadingAction] = useState(false);
 
@@ -68,15 +68,18 @@ export default function MealTimeline({ meals, onRefresh, selectedDate }) {
           marginBottom: '16px',
         }}
       >
-        <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-primary)' }}>
-          Meal Timeline
+        <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+          Meals & Dishes
         </h2>
-        <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-          Date: <strong>{selectedDate}</strong>
-        </span>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+          gap: '20px',
+        }}
+      >
         {MEAL_SLOTS.map((slot) => {
           const SlotIcon = slot.icon;
           const log = mealMap[slot.id];
@@ -91,6 +94,8 @@ export default function MealTimeline({ meals, onRefresh, selectedDate }) {
                 border: '1px solid var(--border-subtle)',
                 boxShadow: 'var(--shadow-sm)',
                 overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
               }}
             >
               {/* Header */}
@@ -110,7 +115,7 @@ export default function MealTimeline({ meals, onRefresh, selectedDate }) {
                       width: '36px',
                       height: '36px',
                       borderRadius: '8px',
-                      background: '#ffffff',
+                      background: 'var(--surface-card)',
                       color: slot.color,
                       display: 'flex',
                       alignItems: 'center',
@@ -145,24 +150,25 @@ export default function MealTimeline({ meals, onRefresh, selectedDate }) {
                       </span>
                     </span>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      {log.totalProtein}g protein • {log.totalCarbs}g carbs • {log.totalFat}g fat
+                      {log.totalProtein}g P • {log.totalCarbs}g C • {log.totalFat}g F
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Items List */}
-              <div style={{ padding: '8px 20px' }}>
+              <div style={{ padding: '8px 20px', flex: 1 }}>
                 {!hasItems ? (
                   <div
                     style={{
-                      padding: '24px 0',
+                      padding: '32px 0',
                       textAlign: 'center',
                       color: 'var(--text-muted)',
-                      fontSize: '0.9rem',
+                      fontSize: '0.88rem',
+                      fontStyle: 'italic',
                     }}
                   >
-                    No items logged for {slot.label}. Use the voice assistant to log what you ate.
+                    No items logged for {slot.label}
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -175,7 +181,7 @@ export default function MealTimeline({ meals, onRefresh, selectedDate }) {
                           key={item._id}
                           style={{
                             padding: '14px 0',
-                            borderBottom: '1px solid #f1f5f9',
+                            borderBottom: '1px solid var(--border-subtle)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
@@ -234,7 +240,10 @@ export default function MealTimeline({ meals, onRefresh, selectedDate }) {
                                       padding: '4px 6px',
                                       borderRadius: '6px',
                                       border: '1px solid var(--beet-primary)',
+                                      background: 'var(--surface-subtle)',
+                                      color: 'var(--text-primary)',
                                       fontSize: '0.85rem',
+                                      outline: 'none',
                                     }}
                                   />
                                   <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -257,8 +266,9 @@ export default function MealTimeline({ meals, onRefresh, selectedDate }) {
                                   <button
                                     onClick={() => setEditingItem(null)}
                                     style={{
-                                      background: '#cbd5e1',
-                                      color: '#0f172a',
+                                      background: 'var(--surface-subtle)',
+                                      color: 'var(--text-secondary)',
+                                      border: '1px solid var(--border-subtle)',
                                       borderRadius: '4px',
                                       padding: '4px 8px',
                                       display: 'flex',
@@ -277,7 +287,7 @@ export default function MealTimeline({ meals, onRefresh, selectedDate }) {
                           </div>
 
                           {/* Nutrition stats + actions */}
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                             <div style={{ textAlign: 'right' }}>
                               <span
                                 style={{
@@ -299,7 +309,7 @@ export default function MealTimeline({ meals, onRefresh, selectedDate }) {
                               </div>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                               {!isEditing && (
                                 <button
                                   onClick={() =>
@@ -327,7 +337,7 @@ export default function MealTimeline({ meals, onRefresh, selectedDate }) {
                                 title="Remove item"
                                 style={{
                                   background: 'transparent',
-                                  color: '#ef4444',
+                                  color: 'var(--beet-primary)',
                                   padding: '6px',
                                   borderRadius: '6px',
                                 }}

@@ -3,30 +3,73 @@
 :root {
   --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   
-  /* Brand palette */
-  --beet-primary: #e11d48;
-  --beet-primary-hover: #be123c;
-  --beet-light: #ffe4e6;
-  --beet-gradient: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+  /* Dark Studio Theme (Default) */
+  --bg-app: #090d16;
+  --bg-main: #090d16;
+  --surface-card: #111827;
+  --surface-subtle: #1a2234;
+  --surface-hover: #222d42;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  /* Typography */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Brand Beet Ruby */
+  --beet-primary: #f43f5e;
+  --beet-primary-hover: #e11d48;
+  --beet-light: rgba(244, 63, 94, 0.14);
+  --beet-gradient: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
   
-  /* Accent greens for nutrition */
+  /* Emerald Nutrition */
   --emerald-primary: #10b981;
-  --emerald-light: #d1fae5;
+  --emerald-light: rgba(16, 185, 129, 0.15);
   --emerald-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
 
-  /* Neutral surfaces */
+  /* Macro Badges */
+  --macro-cal: #fb923c;
+  --macro-cal-bg: rgba(251, 146, 60, 0.14);
+  --macro-protein: #34d399;
+  --macro-protein-bg: rgba(52, 211, 153, 0.14);
+  --macro-carbs: #60a5fa;
+  --macro-carbs-bg: rgba(96, 165, 250, 0.14);
+  --macro-fat: #c084fc;
+  --macro-fat-bg: rgba(192, 132, 252, 0.14);
+
+  /* Shadows & Glows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 24px rgba(244, 63, 94, 0.25);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+}
+
+[data-theme='light'] {
+  --bg-app: #f8fafc;
   --bg-main: #f8fafc;
   --surface-card: #ffffff;
   --surface-subtle: #f1f5f9;
+  --surface-hover: #e2e8f0;
   --border-subtle: #e2e8f0;
   --border-strong: #cbd5e1;
 
-  /* Typography */
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
 
-  /* Macro Badges */
+  --beet-primary: #e11d48;
+  --beet-primary-hover: #be123c;
+  --beet-light: #ffe4e6;
+  --beet-gradient: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+
+  --emerald-primary: #10b981;
+  --emerald-light: #d1fae5;
+
   --macro-cal: #f97316;
   --macro-cal-bg: #ffedd5;
   --macro-protein: #10b981;
@@ -37,11 +80,9 @@
   --macro-fat-bg: #f3e8ff;
 
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08);
+  --shadow-glow: 0 4px 14px rgba(225, 29, 72, 0.2);
 }
 
 * {
@@ -56,13 +97,14 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Animations */
 @keyframes pulse-ring {
-  0% { transform: scale(0.95); opacity: 0.8; }
+  0% { transform: scale(0.95); opacity: 0.9; }
   50% { transform: scale(1.15); opacity: 0.3; }
-  100% { transform: scale(0.95); opacity: 0.8; }
+  100% { transform: scale(0.95); opacity: 0.9; }
 }
 
 @keyframes wave {
@@ -71,8 +113,8 @@ body {
 }
 
 .pulsing-dot {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   background-color: var(--emerald-primary);
   border-radius: 50%;
   animation: pulse-ring 1.5s infinite ease-in-out;
@@ -95,4 +137,23 @@ button {
 
 button:active {
   transform: scale(0.98);
+}
+
+/* Custom Scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }

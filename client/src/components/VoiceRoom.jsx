@@ -163,14 +163,14 @@ export default function VoiceRoom({ onMealUpdate }) {
     <div
       style={{
         background: isConnected
-          ? 'linear-gradient(135deg, #fff1f2 0%, #ffffff 100%)'
+          ? 'linear-gradient(135deg, rgba(244, 63, 94, 0.10) 0%, var(--surface-card) 100%)'
           : 'var(--surface-card)',
-        border: isConnected ? '2px solid var(--beet-primary)' : '1px solid var(--border-subtle)',
+        border: isConnected ? '1px solid var(--beet-primary)' : '1px solid var(--border-subtle)',
         borderRadius: 'var(--radius-xl)',
         padding: '24px',
-        boxShadow: isConnected ? '0 10px 25px -5px rgba(225, 29, 72, 0.15)' : 'var(--shadow-md)',
+        boxShadow: isConnected ? 'var(--shadow-glow)' : 'var(--shadow-md)',
         transition: 'all 0.3s ease',
-        marginBottom: '28px',
+        marginBottom: '24px',
       }}
     >
       <div
@@ -193,7 +193,8 @@ export default function VoiceRoom({ onMealUpdate }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: isConnected ? '0 4px 12px rgba(225, 29, 72, 0.3)' : 'none',
+              boxShadow: isConnected ? '0 4px 14px rgba(244, 63, 94, 0.4)' : 'none',
+              transition: 'all 0.3s ease',
             }}
           >
             <Radio size={28} className={isConnected ? 'pulsing-dot' : ''} />
@@ -201,7 +202,7 @@ export default function VoiceRoom({ onMealUpdate }) {
 
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-primary)' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
                 LiveKit Voice Assistant
               </h2>
               {isConnected && (
@@ -215,11 +216,11 @@ export default function VoiceRoom({ onMealUpdate }) {
                     borderRadius: '20px',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '4px',
+                    gap: '6px',
                   }}
                 >
                   <span className="pulsing-dot" style={{ width: '8px', height: '8px' }}></span>
-                  ACTIVE
+                  ONLINE
                 </span>
               )}
             </div>
@@ -235,7 +236,7 @@ export default function VoiceRoom({ onMealUpdate }) {
             <button
               onClick={toggleMute}
               style={{
-                background: isMuted ? '#fef2f2' : 'var(--surface-subtle)',
+                background: isMuted ? 'rgba(239, 68, 68, 0.15)' : 'var(--surface-subtle)',
                 color: isMuted ? 'var(--beet-primary)' : 'var(--text-primary)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: 'var(--radius-md)',
@@ -265,7 +266,7 @@ export default function VoiceRoom({ onMealUpdate }) {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
-                boxShadow: '0 4px 12px rgba(225, 29, 72, 0.25)',
+                boxShadow: '0 4px 14px rgba(244, 63, 94, 0.35)',
                 opacity: isConnecting ? 0.7 : 1,
               }}
             >
@@ -276,8 +277,9 @@ export default function VoiceRoom({ onMealUpdate }) {
             <button
               onClick={disconnectVoice}
               style={{
-                background: '#f1f5f9',
-                color: '#475569',
+                background: 'var(--surface-subtle)',
+                color: 'var(--text-secondary)',
+                border: '1px solid var(--border-subtle)',
                 borderRadius: 'var(--radius-md)',
                 padding: '12px 20px',
                 fontWeight: '600',
@@ -376,7 +378,7 @@ export default function VoiceRoom({ onMealUpdate }) {
             gap: '8px',
             fontSize: '0.85rem',
             color: 'var(--beet-primary)',
-            background: '#fff1f2',
+            background: 'var(--beet-light)',
             padding: '8px 14px',
             borderRadius: 'var(--radius-md)',
           }}

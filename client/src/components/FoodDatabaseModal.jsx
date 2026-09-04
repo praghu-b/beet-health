@@ -20,8 +20,8 @@ export default function FoodDatabaseModal({ isOpen, onClose, foods }) {
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.6)',
-        backdropFilter: 'blur(4px)',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(6px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -31,14 +31,15 @@ export default function FoodDatabaseModal({ isOpen, onClose, foods }) {
     >
       <div
         style={{
-          background: '#ffffff',
+          background: 'var(--surface-card)',
           borderRadius: 'var(--radius-xl)',
           width: '100%',
-          maxWidth: '800px',
+          maxWidth: '840px',
           maxHeight: '85vh',
           display: 'flex',
           flexDirection: 'column',
           boxShadow: 'var(--shadow-lg)',
+          border: '1px solid var(--border-strong)',
           overflow: 'hidden',
         }}
       >
@@ -52,12 +53,12 @@ export default function FoodDatabaseModal({ isOpen, onClose, foods }) {
             justifyContent: 'space-between',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div
               style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '8px',
+                width: '40px',
+                height: '40px',
+                borderRadius: '10px',
                 background: 'var(--beet-light)',
                 color: 'var(--beet-primary)',
                 display: 'flex',
@@ -65,14 +66,14 @@ export default function FoodDatabaseModal({ isOpen, onClose, foods }) {
                 justifyContent: 'center',
               }}
             >
-              <Database size={20} />
+              <Database size={22} />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-primary)' }}>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
                 Beet Verified Food Database
               </h3>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                Sole source of truth ({foods?.length || 30} verified dishes)
+                Sole source of truth ({foods?.length || 30} verified Indian dishes)
               </p>
             </div>
           </div>
@@ -81,9 +82,13 @@ export default function FoodDatabaseModal({ isOpen, onClose, foods }) {
             onClick={onClose}
             style={{
               background: 'var(--surface-subtle)',
+              border: '1px solid var(--border-subtle)',
               padding: '8px',
               borderRadius: '50%',
               color: 'var(--text-secondary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <X size={18} />
@@ -91,13 +96,13 @@ export default function FoodDatabaseModal({ isOpen, onClose, foods }) {
         </div>
 
         {/* Search bar & Notice */}
-        <div style={{ padding: '16px 24px', background: 'var(--surface-subtle)' }}>
+        <div style={{ padding: '16px 24px', background: 'var(--surface-subtle)', borderBottom: '1px solid var(--border-subtle)' }}>
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
-              background: '#ffffff',
+              background: 'var(--surface-card)',
               borderRadius: 'var(--radius-md)',
               padding: '10px 14px',
               border: '1px solid var(--border-subtle)',
@@ -106,7 +111,7 @@ export default function FoodDatabaseModal({ isOpen, onClose, foods }) {
             <Search size={18} color="var(--text-muted)" />
             <input
               type="text"
-              placeholder="Search by dish name or alias (e.g. roti, chapati, dal, chai, anda)..."
+              placeholder="Search dishes or aliases (e.g. roti, chapati, dal, chai, anda)..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
@@ -115,6 +120,8 @@ export default function FoodDatabaseModal({ isOpen, onClose, foods }) {
                 width: '100%',
                 fontSize: '0.9rem',
                 fontFamily: 'inherit',
+                background: 'transparent',
+                color: 'var(--text-primary)',
               }}
             />
           </div>
@@ -135,7 +142,7 @@ export default function FoodDatabaseModal({ isOpen, onClose, foods }) {
 
         {/* List of Foods */}
         <div style={{ padding: '16px 24px', overflowY: 'auto', flex: 1 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '14px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '14px' }}>
             {filteredFoods.map((food) => (
               <div
                 key={food.id}
@@ -143,7 +150,7 @@ export default function FoodDatabaseModal({ isOpen, onClose, foods }) {
                   border: '1px solid var(--border-subtle)',
                   borderRadius: 'var(--radius-md)',
                   padding: '14px',
-                  background: '#ffffff',
+                  background: 'var(--surface-card)',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
