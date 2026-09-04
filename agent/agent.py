@@ -20,6 +20,7 @@ from livekit.agents import (
     inference,
     RunContext,
 )
+from livekit.agents.voice.agent_session import TurnHandlingOptions
 from livekit.plugins import silero
 
 from food_matcher import food_matcher
@@ -174,6 +175,7 @@ async def entrypoint(ctx: JobContext):
         llm=inference.LLM("google/gemma-4-31b-it"),
         tts=inference.TTS("cartesia/sonic-3"),
         vad=silero.VAD.load(),
+        turn_handling=TurnHandlingOptions(turn_detection="vad"),
     )
 
     agent = BeetNutritionAgent(room=ctx.room)
