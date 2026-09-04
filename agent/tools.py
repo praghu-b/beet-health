@@ -283,3 +283,99 @@ def get_today_summary_action(date: Optional[str] = None) -> Dict[str, Any]:
             "success": False,
             "message": f"Could not reach backend service: {str(e)}"
         }
+
+def get_logged_meals_action(
+    meal_type: Optional[str] = None,
+    date: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Fetches already logged meals and items for a specific meal slot or the entire day.
+    Helps ground the agent so it knows what foods currently exist in MongoDB.
+    """
+    target_date = date or get_current_date()
+    params = {"date": target_date}
+
+    normalized_mt = None
+    if meal_type and meal_type.strip():
+        raw_mt = meal_type.strip().lower()
+        if raw_mt not in ["all", "everything", "today", "day"]:
+            normalized_mt = normalize_meal_type(raw_mt)
+            params["mealType"] = normalized_mt
+
+    try:
+        res = requests.get(f"{API_BASE_URL}/meals", params=params, timeout=8)
+        data = res.json()
+        if res.status_code == 200 and data.get("success"):
+            logs = data.get("data", [])
+
+            def format_qty(qty: Any) -> str:
+                try:
+                    f = float(qty)
+                    return str(int(f)) if f.is_integer() else str(f)
+                except Exception:
+                    return str(qty)
+
+            if normalized_mt:
+                items = []
+                total_cals = 0.0
+                for log in logs:
+                    if log.get("mealType") == normalized_mt:
+                        items.extend(log.get("items", []))
+                        total_cals += log.get("totalCalories", 0)
+
+                if not items:
+                    speech = f"You don't have any items logged for {normalized_mt} today."
+                else:
+                    item_descriptions = [
+                        f"{format_qty(it.get('quantity'))} {it.get('unit')} of {it.get('foodName', it.get('foodId'))}"
+                        for it in items
+                    ]
+                    items_str = ", ".join(item_descriptions)
+                    speech = (
+                        f"For {normalized_mt}, you have logged: {items_str} "
+                        f"(total {round(total_cals, 1)} kcal)."
+                    )
+                return {
+                    "success": True,
+                    "speech": speech,
+                    "data": logs,
+                    "action": "get_logged_meals"
+                }
+
+            # Case: All meals for the day
+            meal_summaries = []
+            total_items = 0
+            for log in logs:
+                mt = log.get("mealType")
+                items = log.get("items", [])
+                if items:
+                    total_items += len(items)
+                    item_strs = [
+                        f"{format_qty(it.get('quantity'))} {it.get('unit')} of {it.get('foodName', it.get('foodId'))}"
+                        for it in items
+                    ]
+                    meal_summaries.append(f"for {mt}: {', '.join(item_strs)} ({log.get('totalCalories', 0)} kcal)")
+
+            if total_items == 0:
+                speech = "You haven't logged any meals today yet."
+            else:
+                speech = f"Today you have logged: {'; '.join(meal_summaries)}."
+
+            return {
+                "success": True,
+                "speech": speech,
+                "data": logs,
+                "action": "get_logged_meals"
+            }
+        else:
+            return {
+                "success": False,
+                "message": data.get("message", "Failed to retrieve meals from backend.")
+            }
+    except Exception as e:
+        logger.error(f"Error calling get meals API: {e}")
+        return {
+            "success": False,
+            "message": f"Could not reach meal service: {str(e)}"
+        }
+

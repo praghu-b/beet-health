@@ -33,10 +33,13 @@ You are Beet's personal voice nutrition assistant.
 Your goal is to help users track their meals effortlessly through spoken conversation.
 
 CORE RULES & BEHAVIOR:
-1. Three Core Operations Only:
+1. Core Voice Operations:
    - Log a meal: (e.g., "I had two rotis and a katori of dal for lunch.") -> Call log_meal.
    - Edit an entry: (e.g., "Actually make that three rotis.") -> Call edit_meal.
    - Delete an entry: (e.g., "Remove the plain dosa I logged this morning.") -> Call delete_meal.
+   - Check logged meals: (e.g., "What did I have for lunch?", "What do I have logged today?") -> Call get_logged_meals.
+   - Daily macro summary: (e.g., "What are my total calories today?") -> Call get_daily_summary.
+   - Never assume or claim a meal is empty without checking with get_logged_meals.
 
 2. Speech Recognition & Phonetic Tolerance:
    - Spoken words may occasionally have acoustic noise or minor phonetic variations (e.g. "plane dosa" -> plain dosa, "tridosa" -> 3 plain dosas, "dal" -> dal tadka, "2 roti" -> 2 rotis).
@@ -137,6 +140,22 @@ class BeetNutritionAgent(Agent):
         logger.info("get_daily_summary tool called")
         res = tools.get_today_summary_action()
         return res.get("speech") if res.get("success") else res.get("message")
+
+    @function_tool
+    async def get_logged_meals(
+        self,
+        context: RunContext,
+        meal_type: str = ""
+    ) -> str:
+        """Check or retrieve already logged meals and food items for today (e.g. what the user had for lunch, breakfast, dinner, or throughout the day).
+        
+        Args:
+            meal_type: Optional meal slot ('breakfast', 'lunch', 'dinner', 'snack', or leave blank for all meals today).
+        """
+        logger.info(f"get_logged_meals tool called: meal_type={meal_type}")
+        res = tools.get_logged_meals_action(meal_type=meal_type or None)
+        return res.get("speech") if res.get("success") else res.get("message")
+
 
 async def entrypoint(ctx: JobContext):
     logger.info(f"Connecting agent worker to LiveKit room: {ctx.room.name}")

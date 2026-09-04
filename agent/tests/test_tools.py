@@ -88,5 +88,42 @@ class TestAgentVoiceTools(unittest.TestCase):
         self.assertEqual(tools.normalize_meal_type("night"), "dinner")
         self.assertEqual(tools.normalize_meal_type("evening"), "snack")
 
+    @patch("tools.requests.get")
+    def test_get_logged_meals_specific_slot(self, mock_get):
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "success": True,
+            "data": [
+                {
+                    "mealType": "lunch",
+                    "totalCalories": 390.0,
+                    "items": [
+                        {"foodId": "plain_rice", "foodName": "Plain Rice (cooked)", "quantity": 1, "unit": "plate"}
+                    ]
+                }
+            ]
+        }
+        mock_get.return_value = mock_resp
+
+        res = tools.get_logged_meals_action(meal_type="lunch")
+        self.assertTrue(res["success"])
+        self.assertIn("For lunch, you have logged: 1 plate of Plain Rice (cooked)", res["speech"])
+        self.assertIn("390.0 kcal", res["speech"])
+
+    @patch("tools.requests.get")
+    def test_get_logged_meals_empty(self, mock_get):
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_resp.json.return_value = {
+            "success": True,
+            "data": []
+        }
+        mock_get.return_value = mock_resp
+
+        res = tools.get_logged_meals_action(meal_type="lunch")
+        self.assertTrue(res["success"])
+        self.assertIn("don't have any items logged for lunch", res["speech"])
+
 if __name__ == "__main__":
     unittest.main()
